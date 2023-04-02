@@ -1,22 +1,32 @@
-// import './App.css';
-import CountryCard from "./components/CountryCard";
+import { useEffect, useState } from 'react';
+import './App.css';
+import CountryCard from "./Components/CountryCard";
+import { getAllCountries } from './Services';
 
 function App() {
+  const [countriesList, setCountriesList] = useState([]);
+  useEffect(()=> {
+    getAllCountries().then((result)=> {
+      const countries = result.data
+      setCountriesList(countries);
+    })
+  }, []);
+
   return (
     <div className="App">
-      <CountryCard
-        name={'India'}
-        capital={'New Delhi'}
-        population={1415000000}
-        flagUrl ={'https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/1200px-Flag_of_India.svg.png'}
-      />
-
-      <CountryCard
-        name={'Russia'}
-        capital={'Moskow'}
-        population={147000000}
-        flagUrl ={'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Flag_of_Russia.svg/640px-Flag_of_Russia.svg.png'}
-      />
+      <div className='country-card-wrapper'>
+        {
+          countriesList.map(country=> (
+            <CountryCard
+          name={country.name}
+          capital={country.capital}
+          population={country.population}
+          flagUrl={country.flags.png}
+          key={country.alpha3Code}
+        />
+          ))
+        }
+      </div>
     </div>
   );
 }
